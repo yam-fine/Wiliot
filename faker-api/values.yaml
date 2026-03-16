@@ -1,0 +1,209 @@
+# Apache Airflow Helm Chart Values
+# Chart: apache-airflow/airflow  (official ASF chart)
+# Docs:  https://airflow.apache.org/docs/helm-chart/
+
+# ── Core config ──────────────────────────────────────────────────────────────
+airflowVersion: "2.9.3"
+defaultAirflowTag: "2.9.3"
+
+executor: KubernetesExecutor   # each task runs as its own pod — best for EKS
+
+# ── Fernet key (from secret created in Step 1) ───────────────────────────────
+fernetKeySecretName: airflow-fernet-key
+
+# ── Webserver ─────────────────────────────────────────────────────────────────
+webserver:
+  replicas: 1
+  defaultUser:
+    enabled: true
+    role: Admin
+    username: admin
+    email: admin@example.com
+    firstName: Admin
+    lastName: User
+    password: admin   # change for real environments
+
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+
+  service:
+    type: ClusterIP
+
+  livenessProbe:
+    initialDelaySeconds: 120
+    timeoutSeconds: 30
+    failureThreshold: 10
+    periodSeconds: 30
+ 
+  readinessProbe:
+    initialDelaySeconds: 120
+    timeoutSeconds: 30
+    failureThreshold: 10
+    periodSeconds: 30
+ 
+  startupProbe:
+    failureThreshold: 30
+    periodSeconds: 10
+    timeoutSeconds: 30
+
+# ── Scheduler ────────────────────────────────────────────────────────────────
+scheduler:
+  replicas: 1
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+
+# ── Triggerer ────────────────────────────────────────────────────────────────
+triggerer:
+  enabled: true
+  replicas: 1
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "256Mi"
+
+# ── DAGs — loaded from the ConfigMap we create ───────────────────────────────
+dags:
+  persistence:
+    enabled: false
+  gitSync:
+    enabled: false
+
+extraVolumes:
+  - name: airflow-dags-cm
+    configMap:
+      name: airflow-dags
+
+extraVolumeMounts:
+  - name: airflow-dags-cm
+    mountPath: /opt/airflow/dags/ingest_faker_data.py
+    subPath: ingest_faker_data.py
+    readOnly: true
+  - name: airflow-dags-cm
+    mountPath: /opt/airflow/dags/pipeline_health_check.py
+    subPath: pipeline_health_check.py
+    readOnly: true
+
+# Apply mounts to ALL components
+workers:
+  extraVolumes:
+    - name: airflow-dags-cm
+      configMap:
+        name: airflow-dags
+  extraVolumeMounts:
+    - name: airflow-dags-cm
+      mountPath: /opt/airflow/dags/ingest_faker_data.py
+      subPath: ingest_faker_data.py
+      readOnly: true
+    - name: airflow-dags-cm
+      mountPath: /opt/airflow/dags/pipeline_health_check.py
+      subPath: pipeline_health_check.py
+      readOnly: true
+ 
+scheduler:
+  extraVolumes:
+    - name: airflow-dags-cm
+      configMap:
+        name: airflow-dags
+  extraVolumeMounts:
+    - name: airflow-dags-cm
+      mountPath: /opt/airflow/dags/ingest_faker_data.py
+      subPath: ingest_faker_data.py
+      readOnly: true
+    - name: airflow-dags-cm
+      mountPath: /opt/airflow/dags/pipeline_health_check.py
+      subPath: pipeline_health_check.py
+      readOnly: true
+
+# ── Airflow config overrides ──────────────────────────────────────────────────
+config:
+  core:
+    load_examples: "False"
+    default_timezone: "UTC"
+  scheduler:
+    min_file_process_interval: "30"
+  webserver:
+    expose_config: "True"
+
+# ── Extra environment variables (RDS connection) ──────────────────────────────
+# extraEnv supports full Kubernetes env syntax including valueFrom
+extraEnv: |
+  - name: RDS_HOST
+    valueFrom:
+      secretKeyRef:
+        name: rds-credentials
+        key: host
+  - name: RDS_PORT
+    valueFrom:
+      secretKeyRef:
+        name: rds-credentials
+        key: port
+  - name: RDS_DBNAME
+    valueFrom:
+      secretKeyRef:
+        name: rds-credentials
+        key: dbname
+  - name: RDS_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: rds-credentials
+        key: username
+  - name: RDS_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: rds-credentials
+        key: password
+
+# ── Extra Python packages installed at runtime ────────────────────────────────
+_airflowAdditionalPipPackages:
+  - psycopg2-binary
+  - pandas
+  - requests
+  - apache-airflow-providers-fab
+  - apache-airflow-providers-postgres
+
+# ── Internal Postgres disabled — using RDS instead ───────────────────────────
+postgresql:
+  enabled: false
+
+# Airflow metadata DB pointed at RDS
+# Create the airflow database first:
+#   psql -h <RDS_ENDPOINT> -U dbadmin -d appdb -c "CREATE DATABASE airflow_metadata;"
+data:
+  metadataConnection:
+    user: dbadmin
+    pass: Sandbox2025!Secure
+    host: yam-postgres.cvm3xjuksdid.us-east-1.rds.amazonaws.com
+    port: 5432
+    db: airflow_metadata
+    sslmode: require
+
+# ── Redis (not needed for KubernetesExecutor) ────────────────────────────────
+redis:
+  enabled: false
+
+# ── StatsD metrics ────────────────────────────────────────────────────────────
+statsd:
+  enabled: false
+
+# ── Logs ─────────────────────────────────────────────────────────────────────
+logs:
+  persistence:
+    enabled: false   # for production, use S3 remote logging
+
+# ── RBAC for KubernetesExecutor ───────────────────────────────────────────────
+rbac:
+  create: true
+
+serviceAccount:
+  create: true
+  name: airflow

@@ -1,0 +1,48 @@
+# faker-api Helm values
+# Docs: https://github.com/joolfe/faker-api
+
+replicaCount: 1
+
+image:
+  repository: joolfe/faker-api
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP   # internal only — Airflow calls it by service DNS
+  port: 3000
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "250m"
+    memory: "256Mi"
+
+# faker-api config — locale and available endpoints
+env:
+  - name: FAKER_LOCALE
+    value: "en"
+
+# Health check
+livenessProbe:
+  httpGet:
+    path: /api/users?_quantity=1
+    port: 3000
+  initialDelaySeconds: 10
+  periodSeconds: 30
+
+readinessProbe:
+  httpGet:
+    path: /api/users?_quantity=1
+    port: 3000
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+autoscaling:
+  enabled: false
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

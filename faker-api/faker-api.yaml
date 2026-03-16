@@ -1,0 +1,174 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: faker-api-data
+  namespace: data-pipeline
+data:
+  db.json: |
+    {
+      "users": [
+        {"id": 1,  "firstname": "Alice",   "lastname": "Smith",    "email": "alice@example.com",  "phone": "555-0101", "city": "New York",    "country": "US"},
+        {"id": 2,  "firstname": "Bob",     "lastname": "Jones",    "email": "bob@corp.io",         "phone": "555-0102", "city": "London",      "country": "UK"},
+        {"id": 3,  "firstname": "Carol",   "lastname": "White",    "email": "carol@mail.net",      "phone": "555-0103", "city": "Berlin",      "country": "DE"},
+        {"id": 4,  "firstname": "David",   "lastname": "Brown",    "email": "david@example.org",   "phone": "555-0104", "city": "Paris",       "country": "FR"},
+        {"id": 5,  "firstname": "Eva",     "lastname": "Davis",    "email": "eva@startup.io",      "phone": "555-0105", "city": "Toronto",     "country": "CA"},
+        {"id": 6,  "firstname": "Frank",   "lastname": "Miller",   "email": "frank@bizz.com",      "phone": "555-0106", "city": "Sydney",      "country": "AU"},
+        {"id": 7,  "firstname": "Grace",   "lastname": "Wilson",   "email": "grace@hello.co",      "phone": "555-0107", "city": "Tokyo",       "country": "JP"},
+        {"id": 8,  "firstname": "Henry",   "lastname": "Moore",    "email": "henry@example.com",   "phone": "555-0108", "city": "Seoul",       "country": "KR"},
+        {"id": 9,  "firstname": "Isla",    "lastname": "Taylor",   "email": "isla@domain.net",     "phone": "555-0109", "city": "Amsterdam",   "country": "NL"},
+        {"id": 10, "firstname": "Jack",    "lastname": "Anderson", "email": "jack@sample.org",     "phone": "555-0110", "city": "Chicago",     "country": "US"},
+        {"id": 11, "firstname": "Karen",   "lastname": "Thomas",   "email": "karen@works.io",      "phone": "555-0111", "city": "Madrid",      "country": "ES"},
+        {"id": 12, "firstname": "Leo",     "lastname": "Jackson",  "email": "leo@test.com",        "phone": "555-0112", "city": "Rome",        "country": "IT"},
+        {"id": 13, "firstname": "Mia",     "lastname": "Harris",   "email": "mia@example.co",      "phone": "555-0113", "city": "Dubai",       "country": "AE"},
+        {"id": 14, "firstname": "Noah",    "lastname": "Martin",   "email": "noah@corp.com",       "phone": "555-0114", "city": "Singapore",   "country": "SG"},
+        {"id": 15, "firstname": "Olivia",  "lastname": "Garcia",   "email": "olivia@email.net",    "phone": "555-0115", "city": "Sao Paulo",   "country": "BR"},
+        {"id": 16, "firstname": "Paul",    "lastname": "Martinez", "email": "paul@example.org",    "phone": "555-0116", "city": "Mexico City", "country": "MX"},
+        {"id": 17, "firstname": "Quinn",   "lastname": "Robinson", "email": "quinn@domain.io",     "phone": "555-0117", "city": "Jakarta",     "country": "ID"},
+        {"id": 18, "firstname": "Rachel",  "lastname": "Clark",    "email": "rachel@biz.com",      "phone": "555-0118", "city": "Cairo",       "country": "EG"},
+        {"id": 19, "firstname": "Sam",     "lastname": "Rodriguez","email": "sam@startup.net",     "phone": "555-0119", "city": "Lagos",       "country": "NG"},
+        {"id": 20, "firstname": "Tina",    "lastname": "Lewis",    "email": "tina@example.com",    "phone": "555-0120", "city": "Mumbai",      "country": "IN"}
+      ],
+      "orders": [
+        {"id": 1,  "user_id": 3,  "product": "Laptop Pro",      "quantity": 1, "unit_price": 1299.99, "total_price": 1299.99, "status": "delivered"},
+        {"id": 2,  "user_id": 7,  "product": "Wireless Mouse",  "quantity": 2, "unit_price": 29.99,   "total_price": 59.98,   "status": "shipped"},
+        {"id": 3,  "user_id": 1,  "product": "USB-C Hub",       "quantity": 1, "unit_price": 49.99,   "total_price": 49.99,   "status": "pending"},
+        {"id": 4,  "user_id": 12, "product": "Mechanical Kbd",  "quantity": 1, "unit_price": 89.00,   "total_price": 89.00,   "status": "delivered"},
+        {"id": 5,  "user_id": 5,  "product": "Monitor 27in",    "quantity": 2, "unit_price": 349.00,  "total_price": 698.00,  "status": "shipped"},
+        {"id": 6,  "user_id": 9,  "product": "Webcam HD",       "quantity": 1, "unit_price": 79.99,   "total_price": 79.99,   "status": "delivered"},
+        {"id": 7,  "user_id": 14, "product": "Desk Lamp",       "quantity": 3, "unit_price": 24.99,   "total_price": 74.97,   "status": "pending"},
+        {"id": 8,  "user_id": 2,  "product": "SSD 1TB",         "quantity": 1, "unit_price": 119.99,  "total_price": 119.99,  "status": "delivered"},
+        {"id": 9,  "user_id": 18, "product": "Headphones BT",   "quantity": 1, "unit_price": 199.00,  "total_price": 199.00,  "status": "cancelled"},
+        {"id": 10, "user_id": 6,  "product": "Standing Desk",   "quantity": 1, "unit_price": 549.00,  "total_price": 549.00,  "status": "shipped"},
+        {"id": 11, "user_id": 11, "product": "Chair Ergonomic", "quantity": 1, "unit_price": 399.00,  "total_price": 399.00,  "status": "delivered"},
+        {"id": 12, "user_id": 4,  "product": "Cable HDMI 2m",   "quantity": 5, "unit_price": 9.99,    "total_price": 49.95,   "status": "delivered"},
+        {"id": 13, "user_id": 16, "product": "Tablet 10in",     "quantity": 1, "unit_price": 429.00,  "total_price": 429.00,  "status": "pending"},
+        {"id": 14, "user_id": 8,  "product": "Phone Stand",     "quantity": 2, "unit_price": 14.99,   "total_price": 29.98,   "status": "shipped"},
+        {"id": 15, "user_id": 20, "product": "Laptop Bag",      "quantity": 1, "unit_price": 59.99,   "total_price": 59.99,   "status": "delivered"},
+        {"id": 16, "user_id": 13, "product": "Smart Speaker",   "quantity": 1, "unit_price": 99.00,   "total_price": 99.00,   "status": "delivered"},
+        {"id": 17, "user_id": 15, "product": "Power Bank",      "quantity": 2, "unit_price": 39.99,   "total_price": 79.98,   "status": "shipped"},
+        {"id": 18, "user_id": 10, "product": "Screen Cleaner",  "quantity": 4, "unit_price": 7.99,    "total_price": 31.96,   "status": "delivered"},
+        {"id": 19, "user_id": 17, "product": "Router WiFi 6",   "quantity": 1, "unit_price": 179.99,  "total_price": 179.99,  "status": "pending"},
+        {"id": 20, "user_id": 19, "product": "Surge Protector", "quantity": 1, "unit_price": 34.99,   "total_price": 34.99,   "status": "cancelled"}
+      ]
+    }
+  server.js: |
+    const http = require('http');
+    const fs   = require('fs');
+
+    const PORT = 3000;
+    const db   = JSON.parse(fs.readFileSync('/data/db.json', 'utf8'));
+
+    function paginate(arr, query) {
+      const limit  = parseInt(query._limit  || arr.length);
+      const start  = parseInt(query._start  || 0);
+      return arr.slice(start, start + limit);
+    }
+
+    function parseQuery(url) {
+      const q = {};
+      const idx = url.indexOf('?');
+      if (idx === -1) return q;
+      url.slice(idx + 1).split('&').forEach(part => {
+        const [k, v] = part.split('=');
+        q[decodeURIComponent(k)] = decodeURIComponent(v || '');
+      });
+      return q;
+    }
+
+    const server = http.createServer((req, res) => {
+      const [path, qs] = req.url.split('?');
+      const query      = parseQuery(req.url);
+      const parts      = path.replace(/^\//, '').split('/');
+      const resource   = parts[0];
+      const id         = parts[1] ? parseInt(parts[1]) : null;
+
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+
+      if (!db[resource]) {
+        res.writeHead(404);
+        return res.end(JSON.stringify({ error: 'Resource not found' }));
+      }
+
+      if (id !== null && !isNaN(id)) {
+        const item = db[resource].find(r => r.id === id);
+        if (!item) { res.writeHead(404); return res.end(JSON.stringify({ error: 'Not found' })); }
+        return res.end(JSON.stringify(item));
+      }
+
+      res.writeHead(200);
+      res.end(JSON.stringify(paginate(db[resource], query)));
+    });
+
+    server.listen(PORT, '0.0.0.0', () => {
+      console.log(`faker-api running on port ${PORT}`);
+      console.log('Available routes: ' + Object.keys(db).map(k => `GET /${k}`).join(', '));
+    });
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: faker-api
+  namespace: data-pipeline
+  labels:
+    app: faker-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: faker-api
+  template:
+    metadata:
+      labels:
+        app: faker-api
+    spec:
+      containers:
+        - name: faker-api
+          image: node:18-alpine
+          command: ["node", "/data/server.js"]
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+          readinessProbe:
+            httpGet:
+              path: /users
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /users
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 30
+      volumes:
+        - name: data
+          configMap:
+            name: faker-api-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: faker-api
+  namespace: data-pipeline
+  labels:
+    app: faker-api
+spec:
+  type: ClusterIP
+  selector:
+    app: faker-api
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+      protocol: TCP
